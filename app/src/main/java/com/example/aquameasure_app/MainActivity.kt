@@ -74,7 +74,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/CesarUrrutia4383/aquameasure_dashboard"))
             startActivity(intent)
         }
-
+        val linkDocs2: TextView = findViewById(R.id.linkDocs2)
+        linkDocs2.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/CesarUrrutia4383/aquameasure_app_full_v1"))
+            startActivity(intent)
+        }
     }
 
     private fun actualizarDatosPeriodicamente() {
