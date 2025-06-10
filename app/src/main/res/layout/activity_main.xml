@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:padding="16dp">
+
+<LinearLayout
+android:id="@+id/mainLayout"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:layout_marginTop="25dp">
+
+<!-- Nombre del proyecto -->
+<TextView
+    android:id="@+id/textProjectName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="AquaMeasure"
+    android:textSize="28sp"
+    android:textStyle="bold"
+    android:textColor="#303F9F"
+android:gravity="center"
+android:paddingBottom="24dp"
+android:fontFamily="sans-serif-medium"/>
+    <TextView
+        android:id="@+id/textSalu2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="¡Buen Dia!"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#303F9F"
+        android:gravity="center"
+        android:paddingBottom="24dp"
+        android:fontFamily="sans-serif-medium"/>
+
+<!-- Contenedor de datos -->
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textFecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fecha: "
+        android:textSize="20sp"
+        android:textColor="#303F9F"
+    android:padding="14dp"
+    android:background="@drawable/bg_rounded_light"
+    android:elevation="4dp"
+    android:layout_marginBottom="12dp"
+    android:fontFamily="sans-serif-medium" />
+
+    <TextView
+        android:id="@+id/textTemp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Temperatura: "
+        android:textSize="18sp"
+        android:textColor="#424242"
+    android:padding="14dp"
+    android:background="@drawable/bg_rounded_light_secondary"
+    android:elevation="2dp"
+    android:layout_marginBottom="10dp"
+    android:fontFamily="sans-serif" />
+
+    <TextView
+        android:id="@+id/textNivel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nivel de Agua: "
+        android:textSize="18sp"
+        android:textColor="#424242"
+        android:padding="14dp"
+        android:background="@drawable/bg_rounded_light_secondary"
+        android:elevation="2dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="sans-serif" />
+
+    <TextView
+        android:id="@+id/textDist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Distancia: "
+        android:textSize="18sp"
+        android:textColor="#424242"
+        android:padding="14dp"
+        android:background="@drawable/bg_rounded_light_secondary"
+        android:elevation="2dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="sans-serif" />
+
+    <TextView
+        android:id="@+id/textCantidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cantidad de Agua: "
+        android:textSize="18sp"
+        android:textColor="#424242"
+        android:padding="14dp"
+        android:background="@drawable/bg_rounded_light_secondary"
+        android:elevation="2dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="sans-serif" />
+
+    <TextView
+        android:id="@+id/textPorcentaje"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Porcentaje de Llenado: "
+        android:textSize="18sp"
+        android:textColor="#D32F2F"
+    android:padding="14dp"
+    android:background="@drawable/bg_rounded_light_secondary"
+    android:elevation="2dp"
+    android:layout_marginBottom="16dp"
+    android:fontFamily="sans-serif-medium" />
+
+    <Button
+        android:id="@+id/btnGraficas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ver Gráficas"
+        android:backgroundTint="#303F9F"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="20dp"
+        android:textAllCaps="false"
+        android:fontFamily="sans-serif-medium"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:layout_marginBottom="24dp"
+        android:indeterminateTint="#303F9F"
+        android:tooltipText="Cargando datos..." />
+</LinearLayout>
+
+<!-- Espacio para links -->
+<LinearLayout
+    android:id="@+id/linksLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="16dp"
+    android:paddingBottom="32dp"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:id="@+id/linkWeb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Visita nuestra web"
+        android:textColor="#1976D2"
+        android:textSize="16sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:textStyle="bold"
+        android:padding="8dp"
+        android:fontFamily="sans-serif"
+        android:autoLink="web"/>
+
+    <TextView
+        android:id="@+id/linkDocs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Documentación"
+        android:textColor="#1976D2"
+        android:textSize="16sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:textStyle="bold"
+        android:padding="8dp"
+        android:fontFamily="sans-serif"
+        android:autoLink="web"/>
+</LinearLayout>
+</LinearLayout>
+    </ScrollView>

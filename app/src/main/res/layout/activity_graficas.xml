@@ -1,0 +1,106 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F7FA"> <!-- Fondo claro, casi blanco -->
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:background="#FFFFFFFF"
+    android:elevation="4dp"
+    android:clipToPadding="false">
+
+    <ProgressBar
+        android:id="@+id/progressBarGraficas"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:indeterminateTint="#6200EE"
+    android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/tituloFecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registros del día:"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#212121"
+    android:layout_marginTop="24dp"
+    android:layout_marginBottom="8dp"
+    android:textAlignment="center"/>
+
+    <!-- Temperatura -->
+    <TextView
+        android:id="@+id/tituloTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Temperatura"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#D32F2F"
+    android:layout_marginTop="16dp"/>
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chartTemp"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Nivel -->
+    <TextView
+        android:id="@+id/tituloNivel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nivel de Agua"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#0288D1"
+    android:layout_marginTop="16dp"/>
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/chartNivel"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Porcentaje -->
+    <TextView
+        android:id="@+id/tituloPorcentaje"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Porcentaje de Llenado"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#FBC02D"
+    android:layout_marginTop="16dp"/>
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/chartPorcentaje"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Porcentaje historial -->
+    <TextView
+        android:id="@+id/tituloPorcentajeHistorial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Historial de Llenado"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#1976D2"
+    android:layout_marginTop="16dp"/>
+
+    <com.github.mikephil.charting.charts.CombinedChart
+        android:id="@+id/chartPorcentajeHistorial"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginBottom="32dp"/>
+</LinearLayout>
+    </ScrollView>
