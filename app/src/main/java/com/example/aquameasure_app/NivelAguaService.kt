@@ -10,16 +10,14 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
-import org.json.JSONObject
-import java.util.*
 
 class NivelAguaService : Service() {
 
     private val url = "https://aquameasure-esp32.onrender.com/ver"
     private val handler = Handler()
-    private val intervalo: Long = 300000
+    private val intervalo: Long = 300000 // 5 minutos
     private var notificadoLleno = false
-    private var notificadoVacio = false// 5 minutos
+    private var notificadoVacio = false
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         crearCanalServicio()
@@ -47,16 +45,15 @@ class NivelAguaService : Service() {
                     if (!notificadoLleno) {
                         enviarNotificacion("🚨 Tinaco casi lleno", "Nivel actual: $porcentajeStr", 1001)
                         notificadoLleno = true
-                        notificadoVacio = false // Resetea el otro estado
+                        notificadoVacio = false
                     }
                 } else if (porcentaje < 20.0) {
                     if (!notificadoVacio) {
                         enviarNotificacion("⚠️ Tinaco casi vacío", "Nivel actual: $porcentajeStr", 1002)
                         notificadoVacio = true
-                        notificadoLleno = false // Resetea el otro estado
+                        notificadoLleno = false
                     }
                 } else {
-                    // Nivel en rango normal, resetea ambas alertas para futuras notificaciones
                     notificadoLleno = false
                     notificadoVacio = false
                 }
@@ -108,7 +105,6 @@ class NivelAguaService : Service() {
                 description = "Notifica cuando el tinaco está en estado crítico."
                 enableLights(true)
                 enableVibration(true)
-                importance = NotificationManager.IMPORTANCE_HIGH
             }
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(canal)

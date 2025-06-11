@@ -2,18 +2,12 @@ package com.example.aquameasure_app
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.android.volley.DefaultRetryPolicy
@@ -36,20 +30,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnGraficas: Button
 
     private val url = "https://aquameasure-esp32.onrender.com/ver"
-    private val handler = Handler(Looper.getMainLooper())
-    private val intervalo: Long = 300000
-    private var ultimoPorcentajeAltoNotificado: Double = -1.0
-    private var ultimoPorcentajeBajoNotificado: Double = -1.0
-    private var notificadoLleno = false
-    private var notificadoVacio = false
+    private var handler: Handler? = null
+    private val intervalo: Long = 300000 // 5 minutos
 
-
-    private lateinit var queue: RequestQueue  // Mantener una sola instancia
+    private lateinit var queue: RequestQueue
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         textFecha = findViewById(R.id.textFecha)
         textTemp = findViewById(R.id.textTemp)
@@ -61,43 +49,40 @@ class MainActivity : AppCompatActivity() {
         btnGraficas = findViewById(R.id.btnGraficas)
 
         queue = Volley.newRequestQueue(this)
+        crearCanalNotificacion()
+        iniciarActualizacionPeriodica()
+
         val servicioIntent = Intent(this, NivelAguaService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(servicioIntent)
         } else {
             startService(servicioIntent)
         }
-        crearCanalNotificacion()
-        actualizarDatosPeriodicamente()
+
         btnGraficas.setOnClickListener {
-            val intent = Intent(this, GraficasActivity::class.java)
-            startActivity(intent)
-        }
-        val linkWeb: TextView = findViewById(R.id.linkWeb)
-        linkWeb.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://aquameasure.onrender.com"))
-            startActivity(intent)
+            startActivity(Intent(this, GraficasActivity::class.java))
         }
 
-        val linkDocs: TextView = findViewById(R.id.linkDocs)
-        linkDocs.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/CesarUrrutia4383/aquameasure_dashboard"))
-            startActivity(intent)
+        findViewById<TextView>(R.id.linkWeb).setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://aquameasure.onrender.com")))
         }
-        val linkDocs2: TextView = findViewById(R.id.linkDocs2)
-        linkDocs2.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/CesarUrrutia4383/aquameasure_app_full_v1"))
-            startActivity(intent)
+        findViewById<TextView>(R.id.linkDocs).setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/CesarUrrutia4383/aquameasure_dashboard")))
+        }
+        findViewById<TextView>(R.id.linkDocs2).setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/CesarUrrutia4383/aquameasure_app_full_v1")))
         }
     }
 
-    private fun actualizarDatosPeriodicamente() {
-        handler.post(object : Runnable {
+    private fun iniciarActualizacionPeriodica() {
+        handler = Handler(Looper.getMainLooper())
+        val runnable = object : Runnable {
             override fun run() {
                 obtenerDatos()
-                handler.postDelayed(this, intervalo)
+                handler?.postDelayed(this, intervalo)
             }
-        })
+        }
+        handler?.post(runnable)
     }
 
     private fun obtenerDatos() {
@@ -124,9 +109,6 @@ class MainActivity : AppCompatActivity() {
                     textDist.text = "Distancia: ${"%.2f".format(dist)} cm"
                     textCantidad.text = "Cantidad de Agua: ${"%.2f".format(cantidad)} L"
                     textPorcentaje.text = "Porcentaje de Llenado: $porcentajeStr"
-
-                    // NOTIFICACIÓN ALTA
-
                 }
                 progressBar.visibility = View.GONE
             },
@@ -135,9 +117,8 @@ class MainActivity : AppCompatActivity() {
                 progressBar.visibility = View.GONE
             })
 
-        // AUMENTAR TIEMPO DE ESPERA
         request.retryPolicy = DefaultRetryPolicy(
-            15000, // tiempo de espera: 15 segundos
+            15000,
             DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         )
@@ -182,5 +163,4 @@ class MainActivity : AppCompatActivity() {
             manager.createNotificationChannel(canal)
         }
     }
-
 }
