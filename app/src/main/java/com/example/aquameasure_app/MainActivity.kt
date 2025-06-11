@@ -3,7 +3,6 @@ package com.example.aquameasure_app
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -18,6 +17,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.android.volley.DefaultRetryPolicy
+import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
@@ -38,8 +38,13 @@ class MainActivity : AppCompatActivity() {
     private val url = "https://aquameasure-esp32.onrender.com/ver"
     private val handler = Handler(Looper.getMainLooper())
     private val intervalo: Long = 300000
+    private var ultimoPorcentajeAltoNotificado: Double = -1.0
+    private var ultimoPorcentajeBajoNotificado: Double = -1.0
+    private var notificadoLleno = false
+    private var notificadoVacio = false
 
-    private lateinit var queue: com.android.volley.RequestQueue  // Mantener una sola instancia
+
+    private lateinit var queue: RequestQueue  // Mantener una sola instancia
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +61,12 @@ class MainActivity : AppCompatActivity() {
         btnGraficas = findViewById(R.id.btnGraficas)
 
         queue = Volley.newRequestQueue(this)
-
+        val servicioIntent = Intent(this, NivelAguaService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(servicioIntent)
+        } else {
+            startService(servicioIntent)
+        }
         crearCanalNotificacion()
         actualizarDatosPeriodicamente()
         btnGraficas.setOnClickListener {
@@ -115,9 +125,8 @@ class MainActivity : AppCompatActivity() {
                     textCantidad.text = "Cantidad de Agua: ${"%.2f".format(cantidad)} L"
                     textPorcentaje.text = "Porcentaje de Llenado: $porcentajeStr"
 
-                    if (porcentaje > 95.0) {
-                        enviarNotificacion(porcentajeStr)
-                    }
+                    // NOTIFICACIÓN ALTA
+
                 }
                 progressBar.visibility = View.GONE
             },
@@ -169,28 +178,9 @@ class MainActivity : AppCompatActivity() {
             ).apply {
                 description = "Notifica cuando el tinaco está casi lleno"
             }
-            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(canal)
         }
     }
 
-    private fun enviarNotificacion(porcentaje: String) {
-        val intent = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            this, 0, intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        val notificacion = NotificationCompat.Builder(this, "alerta_nivel")
-            .setSmallIcon(android.R.drawable.ic_dialog_alert)
-            .setContentTitle("🚨 Tinaco casi lleno")
-            .setContentText("Nivel actual: $porcentaje")
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .build()
-
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        manager.notify(1, notificacion)
-    }
 }
